@@ -1,0 +1,63 @@
+{
+  "id": "spotiskill-api",
+  "type": "php",
+  "database": {
+    "enabled": true,
+    "name": "app",
+    "user": "competitor",
+    "password": "competitor",
+    "host": "127.0.0.1"
+  },
+  "showPoints": true,
+  "groups": [
+    {
+      "match": "SongList.*",
+      "displayName": "Song List"
+    },
+    {
+      "match": "SongDetail.*",
+      "displayName": "Song Detail"
+    },
+    {
+      "match": "SongCreate.*",
+      "displayName": "Song Create"
+    },
+    {
+      "match": "PlaylistCreate.*",
+      "displayName": "Playlist Create"
+    },
+    {
+      "match": "PlaylistList.*",
+      "displayName": "Playlist List"
+    },
+    {
+      "match": "AlbumCreate.*",
+      "displayName": "Album Create"
+    },
+    {
+      "match": "AlbumList.*",
+      "displayName": "Album List"
+    },
+    {
+      "match": "SignupCreate.*",
+      "displayName": "Signup Create"
+    },
+    {
+      "match": "SignupList.*",
+      "displayName": "Signup List"
+    },
+    {
+      "match": "SignupAccept.*",
+      "displayName": "Signup Accept"
+    },
+    {
+      "match": "SignupReject.*",
+      "displayName": "Signup Reject"
+    },
+    {
+      "match": "Stats.*",
+      "displayName": "Stats"
+    }
+  ]
+}
+

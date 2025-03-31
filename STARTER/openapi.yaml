@@ -1,0 +1,582 @@
+openapi: 3.0.0
+info:
+  title: Streaming Musical API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+paths:
+  /signup:
+    post:
+      summary: Creates a new registration request
+      description: Creates a new registration request and adds it to the music streaming service database
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewSignupRequest'
+      responses:
+        '201':
+          description: Registration request added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Registration request added successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+    get:
+      summary: Retrieves the list of registration requests
+      description: Retrieves the list of registration requests on the music streaming service
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  signup:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SignupRequest'
+  /signup/{id}/accept:
+    put:
+      summary: Accept a registration request
+      parameters:
+        - name: id
+          in: path
+          description: Registration request ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Registration request successfully accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Registration request successfully accepted
+        '404':
+          description: The registration request does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The registration request does not exist
+  /signup/{id}/reject:
+    put:
+      summary: Refuse a registration request
+      parameters:
+        - name: id
+          in: path
+          description: Registration request ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Registration request successfully refused
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Registration request successfully refused
+        '404':
+          description: The registration request does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The registration request does not exist
+  /songs:
+    get:
+      summary: Retrieves a list of songs
+      description: Retrieves a list of songs available on the music streaming service
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  songs:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Song'
+    post:
+      summary: Adds a new song
+      description: Adds a new song to the music streaming service's music library
+      requestBody:
+        description: Song to add
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/newSong'
+      responses:
+        '201':
+          description: Song added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Song added successfully
+        '404':
+          description: The album does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The album does not exist
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /songs/{id}:
+    get:
+      summary: Retrieve a song by ID
+      description: Retrieve a song by its unique identifier
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the song to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  song:
+                    $ref: '#/components/schemas/Song'
+        '404':
+          description: The song does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The song does not exist
+  /playlists:
+    get:
+      summary: Retrieves a list of playlists
+      description: Retrieves a list of playlists available on the music streaming service
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  playlists:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Playlist'
+    post:
+      summary: Creates a new playlist
+      description: Creates a new playlist and adds it to the music streaming service's database
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPlaylist'
+      responses:
+        '201':
+          description: Playlist added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Playlist added successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          description: The song does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The song does not exist
+  /albums:
+    get:
+      summary: Recover all albums
+      description: This API allows you to retrieve all the albums available in the music streaming service.
+      responses:
+        '200':
+          description: List of successfully recovered albums.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Album'
+    post:
+      summary: Create a new album
+      description: This API allows you to create a new album in the music streaming service.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/newAlbum'
+      responses:
+        '201':
+          description: Album created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Album created successfully.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /stats:
+    get:
+      summary: Retrieve music streaming service usage statistics
+      description: This API allows you to retrieve statistics on the use of the music streaming service, such as preferred music genres, number of songs listened to, total listening time, listening time per user, most listened to music of the year, month and week.
+      parameters:
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum: [ artists, albums, songs, playing_time ]
+          description: Type of statistic to retrieve.
+          required: true
+        - in: query
+          name: user_id
+          schema:
+            type: integer
+          description: Identifier of the user whose statistics must be retrieved.
+          required: false
+        - in: query
+          name: from
+          schema:
+            type: string
+          description: Start date of the period over which to retrieve statistics in YYYY-MM-DD format.
+          required: false
+        - in: query
+          name: to
+          schema:
+            type: string
+          description: End date of the period over which to retrieve statistics in YYYY-MM-DD format.
+          required: false
+      responses:
+        '200':
+          description: Statistics retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stats:
+                    type: object
+                    properties:
+                      albums:
+                        type: array
+                        description: List of the 3 most listened to albums when the type is albums.
+                        items:
+                          type: object
+                          properties:
+                            time:
+                              type: integer
+                              example: 3185
+                            title:
+                              type: string
+                              example: "Led Zeppelin IV"
+                            artist:
+                              type: string
+                              example: "Led Zeppelin"
+                      songs:
+                        type: array
+                        description: List of the 3 most listened to songs when the type is songs.
+                        items:
+                          type: object
+                          properties:
+                            time:
+                              type: integer
+                              example: 2275
+                            title:
+                              type: string
+                              example: "Black Dog"
+                            artist:
+                              type: string
+                              example: "Led Zeppelin"
+                      artists:
+                        type: array
+                        description: List of the 3 most listened to artists when the type is artists.
+                        items:
+                          type: object
+                          properties:
+                            time:
+                              type: integer
+                              example: 3185
+                            artist:
+                              type: string
+                              example: "Led Zeppelin"
+                      playing:
+                        description: Total listening time when type is playing_time.
+                        type: integer
+                        example: 5008
+        '400':
+          $ref: '#/components/responses/BadRequest'
+components:
+  responses:
+    BadRequest:
+      description: The request is poorly worded
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: The request is poorly worded
+  schemas:
+    Song:
+      type: object
+      required:
+        - id
+        - title
+        - artist
+        - album
+      properties:
+        id:
+          type: integer
+          description: Unique song identifier
+        title:
+          type: string
+          description: Song title
+        artist:
+          type: string
+          description: Song artist
+        album:
+          $ref: '#/components/schemas/AlbumWithoutSongs'
+    SongWithoutAlbum:
+      type: object
+      required:
+        - id
+        - title
+        - artist
+        - album
+      properties:
+        id:
+          type: integer
+          description: Unique song identifier
+        title:
+          type: string
+          description: Song title
+        artist:
+          type: string
+          description: Song artist
+    newSong:
+      type: object
+      required:
+        - id
+        - title
+        - artist_id
+        - album
+      properties:
+        title:
+          type: string
+          description: Song title
+        artist:
+          type: string
+          description: Song artist
+        album_id:
+          type: integer
+          description: Unique album ID
+    PlaylistSong:
+      type: object
+      required:
+        - id
+        - title
+        - artist
+        - album
+      properties:
+        id:
+          type: integer
+          description: Unique song identifier
+        title:
+          type: string
+          description: Song title
+        artist:
+          type: string
+          description: Song artist
+    Playlist:
+      type: object
+      required:
+        - id
+        - title
+        - author
+        - songs
+      properties:
+        id:
+          type: integer
+          description: Unique playlist identifier
+        title:
+          type: string
+          description: Playlist title
+        author:
+          type: string
+          description: Playlist author
+        songs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaylistSong'
+          description: List of songs in the playlist
+    NewPlaylist:
+      type: object
+      required:
+        - title
+        - author
+        - songs
+      properties:
+        title:
+          type: string
+          description: Playlist title
+        author:
+          type: string
+          description: Playlist author
+        songs:
+          type: array
+          items:
+            type: integer
+            format: id
+            description: Unique song identifier
+    NewSignupRequest:
+      type: object
+      required:
+        - email
+        - password
+        - confirm_password
+        - first_name
+        - last_name
+      properties:
+        email:
+          type: string
+          format: email
+          description: User email address
+        password:
+          type: string
+          format: password
+          description: User password
+        confirm_password:
+          type: string
+          format: password
+          description: User password confirmation
+        first_name:
+          type: string
+          description: User first name
+        last_name:
+          type: string
+          description: User last name
+    SignupRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the registration request
+        email:
+          type: string
+          format: email
+          description: User email address
+        first_name:
+          type: string
+          description: User first name
+        last_name:
+          type: string
+          description: User last name
+        status:
+          type: string
+          enum:
+            - pending
+            - accepted
+            - rejected
+          description: Status of registration request
+    Album:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique album identifier.
+        title:
+          type: string
+          description: Album title.
+        artist:
+          type: string
+          description: Name of the artist who created the album.
+        release_date:
+          type: string
+          format: date
+          description: Album release date.
+        songs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongWithoutAlbum'
+          description: List of songs from the album.
+    AlbumWithoutSongs:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique album identifier.
+        title:
+          type: string
+          description: Album title.
+        artist:
+          type: string
+          description: Name of the artist who created the album.
+        release_date:
+          type: string
+          format: date
+          description: Album release date.
+    newAlbum:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Album title.
+        artist:
+          type: string
+          description: Name of the artist who created the album.
+        release_date:
+          type: string
+          format: date
+          description: Album release date.
