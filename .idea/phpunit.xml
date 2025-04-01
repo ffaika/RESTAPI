@@ -3,10 +3,10 @@
   <component name="PHPUnit">
     <option name="directories">
       <list>
-        <option value="$PROJECT_DIR$/STARTER/skeleton_back/markingtests/tests" />
+        <option value="$PROJECT_DIR$/STARTER/markingtests/tests" />
         <option value="$PROJECT_DIR$/rest-api-crud/tests/Unit" />
         <option value="$PROJECT_DIR$/rest-api-crud/tests/Feature" />
-        <option value="$PROJECT_DIR$/STARTER/markingtests/tests" />
+        <option value="$PROJECT_DIR$/STARTER/skeleton_back/markingtests/tests" />
       </list>
     </option>
   </component>
